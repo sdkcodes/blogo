@@ -2,13 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
-use App\Post;
-use App\Comment;
 use App\Category;
+use App\Comment;
+use App\Events\UserCommented;
+use App\Http\Requests\AddCategory;
+use App\Post;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
+
+
 class HomeController extends Controller
 {
     /**
@@ -67,6 +72,9 @@ class HomeController extends Controller
 
     public function editPost($slug){
         $post = DB::table("posts")->where("slug", '=', $slug)->first();
+        if (!Gate::allows('update-post', $post)){
+            dd("error");
+        }
         if ($post){
             return view("author/editpost", ["post" => $post, "title" => "Edit - " . $post->title]);
         }
@@ -148,7 +156,8 @@ class HomeController extends Controller
         $comment->post_id = $request->input("post_id");
         $comment->body = $request->input("body");
         try{
-            $comment->save();    
+            $comment->save();  
+            event(new UserCommented($comment))  ;
         }
         catch(Exception $e){
 
@@ -163,10 +172,20 @@ class HomeController extends Controller
         return view('author.category', ['categories' => $categories]);
     }
 
-    public function addCategory(Request $request){
+    public function addCategory(AddCategory $request){
         $category = new Category();
         $category->title = $request->title;
         $category->save();
         return back()->withMessage("Added successfully.");
+    }
+
+    public function indexAction(){
+        return view()->make("home.index");
+    }
+
+    public function send(){
+        Log::info("Request cycle with Queues begins");
+        $this->dispatch((new SendWelcomeEmail())->delay(60 * 5));
+        Log::info("Request cycle with Queues ends");
     }
 }

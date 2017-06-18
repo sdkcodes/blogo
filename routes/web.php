@@ -1,5 +1,6 @@
 <?php
-
+use GuzzleHttp\Client;
+use App\Utils;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -11,11 +12,11 @@
 |
 */
 
-Route::get('/', 'PublicController@index');
-Route::get('/search', 'PublicController@searchposts');
-Route::get('/posts/{slug}', 'PublicController@viewpost');
-Route::get('/categories', 'PublicController@viewcategories');
-Route::get('/categories/{title}', 'PublicController@viewcategory');
+Route::get('/', 'PostController@index');
+Route::get('/search', 'PostController@searchposts');
+Route::get('/posts/{slug}', 'PostController@viewpost');
+Route::get('/categories', 'CategoryController@viewcategories');
+Route::get('/categories/{title}', 'CategoryController@viewcategory');
 
 // Route::get('/', function () {
 //     return view('index', ['title' => "Title"]);

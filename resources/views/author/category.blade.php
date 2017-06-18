@@ -7,10 +7,11 @@
 			<div class="panel panel-default">
 				<div class="panel-heading">Manage Categories</div>
 				<div class="panel-body">
+					@include("partials.errors")
 					<form action="/backend/addcategory" method="post">
 					    {{ csrf_field() }}
 						<div class="form-group">
-							<input type="text" name="title" class="form-control">
+							<input type="text" name="title" class="form-control" placeholder="Category title">
 						</div>
 						<div class="form-group">
 							<button class="btn btn-info" type="submit">Add Category</button>

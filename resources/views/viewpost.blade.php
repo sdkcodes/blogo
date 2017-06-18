@@ -22,7 +22,9 @@
                         </div>
                         <div class="card-footer text-muted">
                             Posted on {{ $post->created_at }} by <a href="#">{{ $post->user->name }}</a>
-                            
+                            @can('update-post', $post)
+                                <span style="float: right;"><a href="/editpost/{{ $post->slug }}">Edit</a></span>
+                            @endcan
                         </div>
                     </div>    
                     <div class="row">
