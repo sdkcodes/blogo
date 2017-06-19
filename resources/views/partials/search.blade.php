@@ -3,7 +3,7 @@
 
                 <!-- Search Widget -->
                 <div class="card my-4">
-                    <form method="get" action="/search">
+                    <form method="get" action="{{url('/search')}}">
                     <h5 class="card-header">Search</h5>
                     <div class="card-block">
                         <div class="input-group">
@@ -15,3 +15,15 @@
                     </div>
                     </form>
                 </div>
+
+{{-- <script src="{{ asset('js/jquery.min.js') }}"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.10.1/jquery.mark.es6.js"></script>
+<script>
+    $(document).ready(function(){
+        var search_query = "{{ $search_query }}";
+        $("body").mark(search_query,{
+            "element":"span"
+        });
+    });
+</script>  --}}               

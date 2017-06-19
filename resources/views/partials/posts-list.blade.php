@@ -6,7 +6,7 @@
         <div class="card-block">
             <h2 class="card-title"><a href="{{ url('posts/'.$post->slug)}}">{{ $post->title }}</a></h2>
             <p class="card-text">{!! substr($post->body, 0, 225) !!}...</p>
-            <a href="/posts/{{$post->slug}}" class="btn btn-primary"> Read More &rarr;</a>
+            <a href="{{url('/posts/'. $post->slug)}}" class="btn btn-primary"> Read More &rarr;</a>
         </div>
         <div class="card-footer text-muted">
             Posted on {{ $post->created_at }} by <a href="#">{{ $post->user->name }}</a>

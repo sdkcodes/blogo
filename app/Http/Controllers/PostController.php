@@ -48,6 +48,6 @@ class PostController extends Controller
     		return back();
     	}
     	$posts = Post::where('active', 1)->where('title', 'like', "%".$query."%")->get();
-    	return view('index', ['title' => "All Posts", "posts" => $posts]);
+    	return view('index', ['title' => "All Posts", "posts" => $posts, "search_query" => $query]);
     }
 }
