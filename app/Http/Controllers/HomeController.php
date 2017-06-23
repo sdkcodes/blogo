@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Category;
 use App\Comment;
 use App\Events\UserCommented;
+use App\Exceptions\InsufficientPermissionException;
 use App\Http\Requests\AddCategory;
 use App\Post;
 use Carbon\Carbon;
@@ -73,7 +74,13 @@ class HomeController extends Controller
     public function editPost($slug){
         $post = DB::table("posts")->where("slug", '=', $slug)->first();
         if (!Gate::allows('update-post', $post)){
-            dd("error");
+            try{
+            throw new InsufficientPermissionException("You are not authorized to edit this post.");
+            }
+            catch(InsufficientPermissionException $ex){
+                die("No permission, duh");
+            }
+            
         }
         if ($post){
             return view("author/editpost", ["post" => $post, "title" => "Edit - " . $post->title]);
