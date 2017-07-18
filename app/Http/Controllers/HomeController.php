@@ -16,15 +16,21 @@ use Illuminate\Support\Facades\Gate;
 
 
 class HomeController extends Controller
-{
+{   
+    /**
+     * @var App\Post
+     * 
+     */
+    protected $post;
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(Post $post)
     {
         $this->middleware('auth');
+        $this->post = $post;
     }
 
     /**
@@ -34,10 +40,10 @@ class HomeController extends Controller
      */
     public function index($orderBy="NULL")
     {   
-        $posts = Post::orderBy("created_at", $orderBy)->get();
-        // $posts = DB::table("posts")
-        //     ->join("users", "users.id", "=", "posts.user_id")
-        //     ->get(['posts.*', 'users.name as user_name', 'users.email as user_email']);
+        $posts = $this->post->orderBy("created_at", $orderBy)->get();
+
+        // $posts = Post::orderBy("created_at", $orderBy)->get();
+        
         return view('author/home', ["posts" => $posts]);
     }
 
@@ -152,6 +158,22 @@ class HomeController extends Controller
                 ->withErrors("Invalid action specified.");
         }
         return back()->withMessage($message);
+    }
+
+    public function deletePost($slug){
+        $post = DB::table("posts")->where("slug", '=', $slug)->first();
+        if (!Gate::allows('update-post', $post)){
+            try{
+            throw new InsufficientPermissionException("You are not authorized to delete this post.");
+            }
+            catch(InsufficientPermissionException $ex){
+                die("You  do not have permission to delete this post");
+            }
+            
+        }
+        DB::table("posts")
+            ->where("slug", $slug)
+            ->delete();
     }
 
     public function publishComment(Request $request){

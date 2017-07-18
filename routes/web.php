@@ -41,3 +41,5 @@ Route::post('/publishcomment', 'HomeController@publishcomment');
 Route::get('/backend/category', 'HomeController@viewcategory');
 
 Route::post('/backend/addcategory', 'HomeController@addcategory');
+
+Route::get('backend/deletepost/{post}', 'HomeController@deletepost');

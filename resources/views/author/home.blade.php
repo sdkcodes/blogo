@@ -24,11 +24,17 @@
                                                     <br>
                                                     <a href="/editpost/{{$post->slug}}" style="color:brown">Edit</a>     
                                                     <a href="/posts/{{$post->slug}}" target="_blank" class="" style="color:brown">View</a> 
-                                                    @if ($post->active === 0) 
-                                                        <a href="/editpost/{{$post->slug}}/edit/publish" style="color: brown;">Publish</a>
-                                                    @else
-                                                        <a href="/editpost/{{$post->slug}}/edit/draft" style="color: brown;">Draft</a>
-                                                    @endif
+                                                    
+
+                                                    @can('update-post', $post)
+                                                        <a href="/editpost/{{$post->slug}}" style="color:brown">Edit</a>  
+                                                        @if ($post->active === 0) 
+                                                            <a href="/editpost/{{$post->slug}}/edit/publish" style="color: brown;">Publish</a>
+                                                        @else
+                                                            <a href="/editpost/{{$post->slug}}/edit/draft" style="color: brown;">Draft</a>
+                                                        @endif
+                                                        <a href="{{ url('/backend/deletepost/'.$post->slug)}}" style="color: brown">Delete </a>
+                                                    @endcan
                                                 </div>
                                                 <div class="col-md-3">
                                                    by {{ $post->user->name }}        

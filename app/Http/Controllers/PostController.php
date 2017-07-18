@@ -19,7 +19,7 @@ class PostController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(){
-    	$posts = Post::where("active", 1)
+    	$posts = Post::where("active", 1)->orderBy("created_at", "DESC")
     		->get();
     	
     	return view('index', ['title' => "All Posts", "posts" => $posts]);
